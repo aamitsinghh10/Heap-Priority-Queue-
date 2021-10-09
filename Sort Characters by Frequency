@@ -1,0 +1,61 @@
+ static bool comp(pair<char,int> &a,pair<char,int> &b)
+    {
+        return a.second>b.second;
+    }
+    string frequencySort(string s) 
+    {
+        unordered_map<char,int> m;
+        string res="";
+        int n=s.size();
+        if(n==0||n==1||n==2)
+        {
+            return s;
+        }
+        
+        for(int i=0;i<n;i++)
+        {
+            m[s[i]]++;
+        }
+        vector<pair<char,int>> freq;
+        for(auto i:m)
+        {
+            freq.push_back({i.first,i.second});
+        }
+        sort(freq.begin(),freq.end(),comp);
+        for(auto it:freq)
+        {
+            while(it.second--)
+                res+=it.first;
+        }
+        return res;
+    }
+};
+
+//Using Priority QUEUE
+
+class Solution {
+public:
+   
+    string frequencySort(string s) 
+    {
+       
+        priority_queue<pair<int,char>> pq;
+        unordered_map<char,int> mp;
+        for(int i=0;i<s.size();i++)
+            mp[s[i]]++;
+        for(auto i:mp)
+            pq.push(make_pair(i.second,i.first));
+        string ans="";
+        while(!pq.empty())
+        {
+            int a=pq.top().first;
+            char b= pq.top().second;
+            for(int i=0;i<a;i++)
+            {
+                ans+=b;
+            }
+            pq.pop();
+        }
+        return ans;
+    }
+};
