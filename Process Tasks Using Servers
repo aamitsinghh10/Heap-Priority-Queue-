@@ -1,0 +1,39 @@
+class Solution {
+public:
+    vector<int> assignTasks(vector<int>& servers, vector<int>& tasks)
+    {
+        int m=servers.size();
+        int n=tasks.size();
+        vector<int> result;
+        
+        priority_queue<pair<int,int>,vector<pair<int,int>>,greater<pair<int,int>>>free, busy;
+        
+        int time=0;//Initially time is zero
+        
+        for(int i=0;i<m;i++)
+        {
+            free.push({servers[i],i});// free priority_queue is of {weight,index};
+        }
+        for(int i=0;i<n;i++)
+        {
+            if(free.empty())
+            {
+               time=busy.top().first;
+            }
+            while(!busy.empty() && busy.top().first<=time)
+            {
+                int indexofservers=busy.top().second;//busy priority_queue is of {time,indexofserver}
+                free.push({servers[indexofservers],indexofservers});
+                busy.pop();
+            }
+            int index=free.top().second;
+            free.pop();
+            
+            result.push_back(index);
+            
+            busy.push({time+tasks[i],index});
+            time=max(time,i+1);
+        }
+        return result;
+    }
+};
